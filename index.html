@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Face Lock Demo</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+  margin: 0;
+  background: #0b1220;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-family: Arial;
+  color: white;
+  flex-direction: column;
+}
+
+h2 {
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+/* 🔵 kamera bulat */
+.camera-box {
+  width: 260px;
+  height: 260px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 4px solid #22c55e;
+  box-shadow: 0 0 25px rgba(34,197,94,0.5);
+  position: relative;
+}
+
+video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scaleX(-1); /* mirror biar kayak kaca */
+}
+
+.status {
+  margin-top: 20px;
+  font-size: 14px;
+  opacity: 0.8;
+}
+</style>
+</head>
+
+<body>
+
+<h2>🔒 Face Unlock System</h2>
+
+<div class="camera-box">
+  <video id="video" autoplay playsinline></video>
+</div>
+
+<div class="status" id="status">Mengaktifkan kamera...</div>
+
+<script>
+const video = document.getElementById("video");
+const statusText = document.getElementById("status");
+
+// 🔥 auto jalan tanpa tombol
+async function startCamera() {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: "user" },
+      audio: false
+    });
+
+    video.srcObject = stream;
+    statusText.textContent = "Kamera aktif - arahkan wajah";
+
+  } catch (err) {
+    statusText.textContent = "Gagal akses kamera: " + err.message;
+  }
+}
+
+// langsung jalan saat halaman dibuka
+window.onload = startCamera;
+</script>
+
+</body>
+</html>
