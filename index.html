@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Face Scan</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+  margin: 0;
+  background: #0b1220;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-family: Arial;
+  color: white;
+}
+
+h2 {
+  margin-bottom: 20px;
+}
+
+/* 🔵 container kamera */
+.wrapper {
+  position: relative;
+  width: 260px;
+  height: 260px;
+}
+
+/* 🔵 ring loading */
+.ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 4px solid rgba(34,197,94,0.2);
+}
+
+/* animasi scan hijau */
+.ring::before {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 4px solid transparent;
+  border-top: 4px solid #22c55e;
+  border-right: 4px solid #22c55e;
+  animation: spin 1.2s linear infinite;
+  box-shadow: 0 0 15px #22c55e;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* 🔵 kamera bulat */
+.camera {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  overflow: hidden;
+  position: relative;
+}
+
+video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scaleX(-1);
+}
+
+.status {
+  margin-top: 20px;
+  opacity: 0.8;
+}
+</style>
+</head>
+
+<body>
+
+<h2>🔒 Face Scan Active</h2>
+
+<div class="wrapper">
+  <div class="ring"></div>
+  <div class="camera">
+    <video id="video" autoplay playsinline></video>
+  </div>
+</div>
+
+<div class="status" id="status">Mengaktifkan scan wajah...</div>
+
+<script>
+const video = document.getElementById("video");
+const statusText = document.getElementById("status");
+
+async function startCamera() {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: "user" },
+      audio: false
+    });
+
+    video.srcObject = stream;
+    statusText.textContent = "Scanning wajah...";
+
+  } catch (err) {
+    statusText.textContent = "Kamera gagal: " + err.message;
+  }
+}
+
+window.onload = startCamera;
+</script>
+
+</body>
+</html>
